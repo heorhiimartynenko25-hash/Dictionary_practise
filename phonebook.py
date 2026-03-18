@@ -1,4 +1,5 @@
 phonebook = []
+checker = False
 
 while True:
     command = input("enter command: ")
@@ -10,4 +11,18 @@ while True:
              "phone": input("Enter phone number: ")}
         )
     elif command == "show":
-        print(*phonebook)
+        for human in phonebook:
+            print(human["name"], ' - ', human["phone"])
+    elif command == "remove":
+        for human in phonebook:
+            if human['phone'] == input("Enter phone number: "):
+                phonebook.remove(human)
+    elif command == "search":
+        search_name = input("Enter name: ")
+        for human in phonebook:
+            if human['name'] == search_name:
+                print(f"{human['name']} - {human['phone']}")
+                checker = True
+        if not(checker):
+            print("Not found")
+        checker = False
