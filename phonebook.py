@@ -28,6 +28,7 @@ symbols_phone = '0123456789-'
 
 while True:
     command = input("enter command: ")
+
     if command == "exit":
         break
 
@@ -61,9 +62,45 @@ while True:
             print(human["name"], ' - ', human["phone"])
 
     elif command == "remove":
-        for human in phonebook:
-            if human['phone'] == input("Enter phone number: "):
-                phonebook.remove(human)
+        entry = input("Who do you want to remove? ")
+        to_remove = []
+
+        if is_name_allowed(entry, symbols_phone):
+            print("Assuming phone. Searching...")
+            to_remove = look_for_repetitions_dict(phonebook, "phone", entry)
+            if len(to_remove) == 0:
+                print("No entries were found.")
+            else:
+                print("Going to remove: " + phonebook[to_remove[0]]['name'] + " - " + phonebook[to_remove[0]]['phone'] + ". Are you sure? Y/N")
+                confirmation = input()
+                if confirmation == "Y" or confirmation == "y":
+                    phonebook.pop(to_remove[0])
+                    print("Removed successfully.")
+                else:
+                    print("Remove cancelled successfully.")
+
+        else:
+            print("Assuming name. Searching...")
+            to_remove = look_for_repetitions_dict(phonebook, "name", entry)
+
+            if len(to_remove) == 0:
+                print("No entries were found.")
+            else:
+                print("Going to remove:", "\n")
+                for i in range(len(to_remove)):
+                    print(f"{i+1}.", phonebook[to_remove[i]]['name'], " - ", phonebook[to_remove[i]]['phone'], end=",\n")
+                print("\nare you sure? Y/N")
+                confirmation = input()
+
+                if confirmation.lower() == "y":
+                    for i in range(len(to_remove)):
+                        phonebook.pop(to_remove[i] - i)
+                    print("Removed successfully.")
+                else:
+                    print("Remove cancelled successfully.")
+
+
+
 
     elif command == "search":
         search_type = input("by name / by phone: ")
