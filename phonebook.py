@@ -33,19 +33,28 @@ while True:
 
     elif command == "add":
         input_name = input("Enter name: ")
-        input_phone = input("Enter phone number: ")
+        if not input_name == "/..":
+            input_phone = input("Enter phone number: ")
+            if not input_phone == "/..":
 
-        for human in phonebook:
-            if human['phone'] == input_phone:
-                print(f"{human['name']} already has this number. Maybe, an error occured.")
-                checker = True
+                while input_name != "/.." and input_phone != "/..":
 
-        if not(checker):
-            phonebook.append(
-                {"name" : input_name,
-                 "phone": input_phone}
-            )
-        checker = False
+                    if is_name_allowed(input_phone, symbols_phone):
+
+                        repetitions_id = look_for_repetitions_dict(phonebook, "phone", input_phone)
+                        if len(repetitions_id) == 0:
+                            phonebook.append({
+                                "name": input_name,
+                                "phone": input_phone
+                            })
+                            break
+                        else:
+                            print(phonebook[repetitions_id[0]]["name"] + " already has this phone number. Try again.")
+                            input_phone = input("Enter phone number: ")
+
+                    else:
+                        print("Phone numbers can contain only digits and '-' symbol. Try again.")
+                        input_phone = input("Enter phone number: ")
 
     elif command == "show":
         for human in phonebook:
